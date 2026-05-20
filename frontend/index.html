@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CAQR - Generador de códigos QR gratuito. Convierte enlaces, documentos e imágenes en códigos QR al instante.">
+    <title>CAQR — Generador de Códigos QR</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <!-- ==================== Animated Background ==================== -->
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- ==================== Main Container ==================== -->
+    <main class="app-container">
+
+        <!-- Header -->
+        <header class="app-header" id="app-header">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <i data-lucide="qr-code" class="logo-lucide"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>CAQR</h1>
+                    <p class="tagline">Generador de Códigos QR</p>
+                </div>
+            </div>
+            <p class="subtitle">Convierte enlaces, documentos e imágenes en códigos QR al instante</p>
+        </header>
+
+        <!-- Card principal -->
+        <section class="main-card" id="main-card">
+
+            <!-- ========== Tabs ========== -->
+            <nav class="tabs" id="tabs-nav" role="tablist" aria-label="Tipo de contenido">
+                <button
+                    class="tab active"
+                    id="tab-link"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="panel-link"
+                    data-tab="link"
+                >
+                    <i data-lucide="link" class="tab-icon"></i>
+                    <span>Enlace</span>
+                </button>
+                <button
+                    class="tab"
+                    id="tab-file"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-file"
+                    data-tab="file"
+                >
+                    <i data-lucide="file-text" class="tab-icon"></i>
+                    <span>Archivo</span>
+                </button>
+                <button
+                    class="tab"
+                    id="tab-image"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-image"
+                    data-tab="image"
+                >
+                    <i data-lucide="image" class="tab-icon"></i>
+                    <span>Imagen</span>
+                </button>
+                <div class="tab-indicator" id="tab-indicator"></div>
+            </nav>
+
+            <!-- ========== Paneles ========== -->
+            <div class="panels-wrapper">
+
+                <!-- Panel: Enlace -->
+                <div class="panel active" id="panel-link" role="tabpanel" aria-labelledby="tab-link">
+                    <div class="panel-content">
+                        <div class="input-group">
+                            <label for="url-input" class="input-label">
+                                <i data-lucide="globe" class="label-icon"></i>
+                                Pega tu enlace
+                            </label>
+                            <div class="input-wrapper">
+                                <input
+                                    type="url"
+                                    id="url-input"
+                                    class="text-input"
+                                    placeholder="https://ejemplo.com"
+                                    autocomplete="off"
+                                    spellcheck="false"
+                                >
+                                <button class="btn-clear" id="btn-clear-url" title="Limpiar" aria-label="Limpiar campo">
+                                    <i data-lucide="x" class="clear-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="btn-generate" id="btn-generate-url">
+                            <i data-lucide="sparkles" class="btn-icon"></i>
+                            <span>Generar QR</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Panel: Archivo -->
+                <div class="panel" id="panel-file" role="tabpanel" aria-labelledby="tab-file">
+                    <div class="panel-content">
+                        <div
+                            class="drop-zone"
+                            id="drop-zone-file"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Arrastra un archivo aquí o haz clic para seleccionar"
+                        >
+                            <div class="drop-zone-inner">
+                                <div class="drop-icon-wrapper">
+                                    <i data-lucide="upload-cloud" class="drop-icon"></i>
+                                </div>
+                                <p class="drop-text">Arrastra tu archivo aquí</p>
+                                <p class="drop-subtext">o <span class="drop-browse">busca en tu dispositivo</span></p>
+                                <p class="drop-hint">PDF, DOCX — Máx. 5MB</p>
+                            </div>
+                            <input
+                                type="file"
+                                id="file-input-doc"
+                                accept=".pdf,.docx"
+                                class="file-input-hidden"
+                            >
+                        </div>
+                        <!-- Archivo seleccionado -->
+                        <div class="file-preview hidden" id="file-preview-doc">
+                            <div class="file-preview-info">
+                                <i data-lucide="file-check-2" class="file-preview-icon"></i>
+                                <div class="file-preview-details">
+                                    <span class="file-preview-name" id="file-name-doc">documento.pdf</span>
+                                    <span class="file-preview-size" id="file-size-doc">1.2 MB</span>
+                                </div>
+                            </div>
+                            <button class="btn-remove-file" id="btn-remove-doc" title="Quitar archivo" aria-label="Quitar archivo">
+                                <i data-lucide="trash-2" class="remove-icon"></i>
+                            </button>
+                        </div>
+                        <button class="btn-generate" id="btn-generate-file">
+                            <i data-lucide="sparkles" class="btn-icon"></i>
+                            <span>Subir y Generar QR</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Panel: Imagen -->
+                <div class="panel" id="panel-image" role="tabpanel" aria-labelledby="tab-image">
+                    <div class="panel-content">
+                        <div
+                            class="drop-zone"
+                            id="drop-zone-image"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Arrastra una imagen aquí o haz clic para seleccionar"
+                        >
+                            <div class="drop-zone-inner">
+                                <div class="drop-icon-wrapper">
+                                    <i data-lucide="image-plus" class="drop-icon"></i>
+                                </div>
+                                <p class="drop-text">Arrastra tu imagen aquí</p>
+                                <p class="drop-subtext">o <span class="drop-browse">busca en tu dispositivo</span></p>
+                                <p class="drop-hint">JPG, JPEG, PNG — Máx. 5MB</p>
+                            </div>
+                            <input
+                                type="file"
+                                id="file-input-img"
+                                accept=".jpg,.jpeg,.png"
+                                class="file-input-hidden"
+                            >
+                        </div>
+                        <!-- Vista previa de imagen -->
+                        <div class="image-preview hidden" id="image-preview-box">
+                            <img id="image-preview-thumb" src="" alt="Vista previa de imagen">
+                            <div class="image-preview-overlay">
+                                <button class="btn-remove-file" id="btn-remove-img" title="Quitar imagen" aria-label="Quitar imagen">
+                                    <i data-lucide="trash-2" class="remove-icon"></i>
+                                </button>
+                            </div>
+                            <div class="image-preview-info">
+                                <span class="file-preview-name" id="file-name-img">imagen.png</span>
+                                <span class="file-preview-size" id="file-size-img">0.5 MB</span>
+                            </div>
+                        </div>
+                        <button class="btn-generate" id="btn-generate-image">
+                            <i data-lucide="sparkles" class="btn-icon"></i>
+                            <span>Subir y Generar QR</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div><!-- /panels-wrapper -->
+
+        </section><!-- /main-card -->
+
+        <!-- ========== Resultado QR ========== -->
+        <section class="qr-result hidden" id="qr-result">
+            <div class="qr-result-card">
+                <div class="qr-result-header">
+                    <i data-lucide="check-circle-2" class="result-icon"></i>
+                    <h2>¡Tu código QR está listo!</h2>
+                </div>
+                <div class="qr-image-wrapper" id="qr-image-wrapper">
+                    <img id="qr-image" src="" alt="Código QR generado">
+                    <div class="qr-glow"></div>
+                </div>
+                <p class="qr-target-url" id="qr-target-url"></p>
+                <div class="qr-actions">
+                    <button class="btn-download" id="btn-download-qr">
+                        <i data-lucide="download" class="btn-icon"></i>
+                        <span>Descargar QR</span>
+                    </button>
+                    <button class="btn-new" id="btn-new-qr">
+                        <i data-lucide="plus" class="btn-icon"></i>
+                        <span>Nuevo QR</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== Toast Notifications ==================== -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ==================== Loading Overlay ==================== -->
+    <div class="loading-overlay hidden" id="loading-overlay">
+        <div class="loader-content">
+            <div class="spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <p class="loader-text" id="loader-text">Generando código QR...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
